@@ -24,30 +24,54 @@ gsap.ticker.lagSmoothing(0)
 
 // Setup parallax effect for all parallax sections
 function setupParallax() {
-    const parallaxSections = document.querySelectorAll('.parallax-one, .parallax-two, .parallax-three')
+    // Parallax for Pan's Labyrinth and Sunrise
+    const standardSections = document.querySelectorAll('.parallax-one, .parallax-two')
 
-    parallaxSections.forEach((section) => {
+    standardSections.forEach((section) => {
         const img = section.querySelector('.parallax-img')
 
         if (img) {
-            // Create intense parallax effect - large movement range
             gsap.fromTo(img,
                 {
-                    yPercent: -40 // Start: image shifted significantly up
+                    yPercent: -40
                 },
                 {
-                    yPercent: 40, // End: image shifted significantly down
+                    yPercent: 40,
                     ease: 'none',
                     scrollTrigger: {
                         trigger: section,
                         start: 'top bottom',
                         end: 'bottom top',
-                        scrub: 0.3, // Faster response for more dramatic effect
+                        scrub: 0.3,
                     }
                 }
             )
         }
     })
+
+    // Special parallax for The Truman Show - starts lower to show actor's face
+    const trumanSection = document.querySelector('.parallax-three')
+    if (trumanSection) {
+        const img = trumanSection.querySelector('.parallax-img')
+
+        if (img) {
+            gsap.fromTo(img,
+                {
+                    yPercent: -20 // Starts higher (image shifted less up) to show face
+                },
+                {
+                    yPercent: 50,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: trumanSection,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 0.3,
+                    }
+                }
+            )
+        }
+    }
 }
 
 // Initialize when DOM is ready
