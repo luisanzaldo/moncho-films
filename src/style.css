@@ -85,6 +85,10 @@
 
 /* Typography */
 /**************************/
+#parallax-world-of-ugg {
+  margin-top: 70px;
+}
+
 #parallax-world-of-ugg h1 {
   font-family: 'Oswald', sans-serif;
   font-size: 24px;
@@ -151,7 +155,7 @@
 /**************************/
 #parallax-world-of-ugg .title {
   background: white;
-  padding: 60px;
+  padding: 100px 60px;
   margin: 0 auto;
   text-align: center;
 }
@@ -243,25 +247,68 @@
 
 /* Media Queries */
 /**************************/
-@media screen and (max-width: 959px) and (min-width: 768px) {
+@media screen and (max-width: 959px) {
+  .nav-container {
+    width: 100%;
+    padding: 0 20px;
+  }
+
   #parallax-world-of-ugg .block {
-    padding: 40px;
-    width: 620px;
+    width: 90%;
+    padding: 40px 20px;
   }
 }
 
 @media screen and (max-width: 767px) {
-  #parallax-world-of-ugg .block {
-    padding: 30px;
-    width: 420px;
+  .navbar {
+    height: 60px;
+  }
+
+  .nav-links {
+    gap: 15px;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .nav-logo-letterboxd {
+    height: 20px;
+  }
+
+  #parallax-world-of-ugg h1 {
+    font-size: 28px;
   }
 
   #parallax-world-of-ugg h2 {
-    font-size: 30px;
+    font-size: 40px;
+    letter-spacing: 5px;
+  }
+
+  #parallax-world-of-ugg h3 {
+    font-size: 12px;
+    letter-spacing: 4px;
+  }
+
+  #parallax-world-of-ugg .title {
+    padding: 40px 20px;
   }
 
   #parallax-world-of-ugg .block {
-    padding: 30px;
+    width: 100%;
+    padding: 40px 20px;
+    box-sizing: border-box;
+  }
+
+  #parallax-world-of-ugg p {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .first-character {
+    font-size: 60px;
+    line-height: 50px;
   }
 
   #parallax-world-of-ugg .parallax-one,
@@ -269,12 +316,17 @@
   #parallax-world-of-ugg .parallax-three {
     padding-top: 100px;
     padding-bottom: 100px;
+    background-attachment: fixed;
+    /* Restaurado el efecto parallax */
   }
 }
 
 @media screen and (max-width: 479px) {
-  #parallax-world-of-ugg .block {
-    padding: 30px 15px;
-    width: 290px;
+  #parallax-world-of-ugg h2 {
+    font-size: 30px;
+  }
+
+  .nav-links {
+    gap: 10px;
   }
 }
