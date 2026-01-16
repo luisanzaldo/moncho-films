@@ -112,6 +112,60 @@ async function loadArticle() {
     }
 }
 
+// Function to load reviews list
+async function loadReviews() {
+    const gridContainer = document.querySelector('.reviews-grid');
+    // Only run if we are on the reviews page
+    if (!gridContainer) return false;
+
+    try {
+        const modules = import.meta.glob('/content/*.md', { query: '?raw', eager: true });
+        const posts = [];
+
+        for (const path in modules) {
+            const rawContent = modules[path].default;
+            const { data } = parseFrontmatter(rawContent);
+            const slug = path.split('/').pop().replace('.md', '');
+
+            posts.push({
+                ...data,
+                slug,
+                // Fallback date for sorting if needed
+                pubDate: data.pubDate ? new Date(data.pubDate) : new Date(0)
+            });
+        }
+
+        // Sort by date (newest first)
+        posts.sort((a, b) => b.pubDate - a.pubDate);
+
+        // Generate HTML
+        let html = '';
+        posts.forEach(post => {
+            const imgPath = post.heroImage ? post.heroImage.replace('../../', './') : '';
+
+            html += `
+                <div class="review-card" onclick="window.location.href='./article.html?slug=${post.slug}'">
+                    <div class="card-image">
+                        <img src="${imgPath}" alt="${post.title}">
+                    </div>
+                    <div class="card-info">
+                        <h4>${post.title}</h4>
+                        <p>${post.director || post.author || ''}, ${post.year || new Date(post.pubDate).getFullYear() || ''}</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        gridContainer.innerHTML = html;
+        return true;
+
+    } catch (error) {
+        console.error("Error loading reviews:", error);
+        gridContainer.innerHTML = `<p>Error cargando reseñas.</p>`;
+        return false;
+    }
+}
+
 // Setup parallax effect
 function setupParallax() {
     // Standard parallax
@@ -202,6 +256,9 @@ function setupIntro() {
 document.addEventListener('DOMContentLoaded', async () => {
     // Try to load article content if on article page
     const isArticle = await loadArticle();
+
+    // Try to load reviews list if on reviews page
+    await loadReviews();
 
     // Initialize animations
     setupParallax();
