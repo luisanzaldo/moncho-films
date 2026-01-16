@@ -28,6 +28,7 @@
 /* Navbar */
 /**************************/
 .navbar {
+  opacity: 0;
   position: fixed;
   top: 0;
   left: 0;
@@ -97,6 +98,8 @@
   color: black;
   padding: 0;
   margin: 0 0 20px 0;
+  opacity: 0;
+  /* Animación inicial */
   /* Separación añadida para el home */
 }
 
@@ -107,6 +110,7 @@
   color: #888;
   line-height: 1.5;
   margin-top: 0;
+  opacity: 0;
 }
 
 #parallax-world-of-ugg h1.quote-title {
@@ -114,6 +118,7 @@
   line-height: 1.4;
   font-size: 24px;
   margin-bottom: 20px;
+  opacity: 0;
 }
 
 #parallax-world-of-ugg .separator {
@@ -121,6 +126,7 @@
   height: 2px;
   background-color: #3b8595;
   margin: 0 auto 20px auto;
+  opacity: 0;
 }
 
 #parallax-world-of-ugg h3 {
@@ -132,9 +138,7 @@
   margin: 0;
   font-weight: 400;
   line-height: 0;
-  /* Adjusted h3 */
-  letter-spacing: 8px;
-  /* Adjusted h3 */
+  opacity: 0;
 }
 
 #parallax-world-of-ugg h2 {

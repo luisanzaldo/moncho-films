@@ -28,6 +28,7 @@
 /* Navbar */
 /**************************/
 .navbar {
+  opacity: 0;
   position: fixed;
   top: 0;
   left: 0;
@@ -97,6 +98,8 @@
   color: black;
   padding: 0;
   margin: 0 0 20px 0;
+  opacity: 0;
+  /* Animación inicial */
   /* Separación añadida para el home */
 }
 
@@ -113,6 +116,7 @@
   background-color: #3b8595;
   /* Color acento de Letterboxd/Moncho Films */
   margin: 0 auto 20px auto;
+  opacity: 0;
 }
 
 #parallax-world-of-ugg h3 {
@@ -123,6 +127,7 @@
   color: #888;
   margin: 0;
   font-weight: 400;
+  opacity: 0;
 }
 
 #parallax-world-of-ugg h2 {
@@ -155,6 +160,7 @@
   color: #888;
   line-height: 1.5;
   margin-top: 0;
+  opacity: 0;
 }
 
 #parallax-world-of-ugg p {

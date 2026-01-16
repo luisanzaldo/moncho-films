@@ -74,8 +74,49 @@ function setupParallax() {
     }
 }
 
+// Setup intro animation
+function setupIntro() {
+    document.body.classList.add('loaded')
+
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+    tl.fromTo('.navbar',
+        { y: -100, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, delay: 0.5 }
+    )
+        .fromTo('#parallax-world-of-ugg .title h1',
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.2 },
+            '-=0.6'
+        )
+        .fromTo('#parallax-world-of-ugg .title h3',
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1 },
+            '-=0.8'
+        )
+        // Support for criticas page titles too
+        .fromTo('.quote-title',
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.2 },
+            '-=1'
+        )
+        .fromTo('.separator',
+            { scaleX: 0, opacity: 0 },
+            { scaleX: 1, opacity: 1, duration: 0.8 },
+            '-=0.8'
+        )
+        .fromTo('.author-name',
+            { y: 20, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1 },
+            '-=0.6'
+        )
+}
+
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', setupParallax)
+document.addEventListener('DOMContentLoaded', () => {
+    setupParallax()
+    setupIntro()
+})
 
 // Also run on window load to ensure images are ready
 window.addEventListener('load', () => {
