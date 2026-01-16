@@ -363,8 +363,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
-  opacity: 0;
-  /* Animación inicial */
+  padding: 40px 20px;
 }
 
 .reviews-grid {
@@ -383,6 +382,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  opacity: 0;
+  /* Animación inicial individual */
 }
 
 .review-card:hover {

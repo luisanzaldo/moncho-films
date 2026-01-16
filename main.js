@@ -2,6 +2,8 @@ import Lenis from 'lenis'
 import 'lenis/dist/lenis.css'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { marked } from 'marked'
+// Removed gray-matter to avoid Buffer issues in browser
 
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger)
@@ -22,19 +24,103 @@ gsap.ticker.add((time) => {
 
 gsap.ticker.lagSmoothing(0)
 
-// Setup parallax effect for all parallax sections
+// Lightweight frontmatter parser
+function parseFrontmatter(text) {
+    const pattern = /^---[\s\S]*?---/;
+    const match = text.match(pattern);
+
+    if (!match) return { data: {}, content: text };
+
+    const frontmatterBlock = match[0];
+    const content = text.replace(pattern, '').trim();
+    const data = {};
+
+    const lines = frontmatterBlock.split('\n');
+    lines.forEach(line => {
+        if (line.trim() === '---') return;
+        const [key, ...valueParts] = line.split(':');
+        if (key && valueParts.length) {
+            let value = valueParts.join(':').trim();
+            // Remove quotes if preserved
+            if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
+            if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
+            data[key.trim()] = value;
+        }
+    });
+
+    return { data, content };
+}
+
+// Function to load article based on URL
+async function loadArticle() {
+    const container = document.querySelector('.article-content');
+    if (!container) return false;
+
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('slug');
+
+    if (!slug) {
+        container.innerHTML = '<div class="block"><p>Artículo no especificado.</p></div>';
+        return true;
+    }
+
+    try {
+        // Dynamic import of markdown content
+        const modules = import.meta.glob('/content/*.md', { query: '?raw', eager: true });
+        const key = `/content/${slug}.md`;
+
+        if (!modules[key]) {
+            throw new Error('Artículo no encontrado');
+        }
+
+        const rawContent = modules[key].default;
+        // Use custom parser instead of gray-matter
+        const { data, content } = parseFrontmatter(rawContent);
+        const htmlContent = marked(content);
+
+        // Render Article Structure
+        const imgPath = data.heroImage ? data.heroImage.replace('../../', './') : '';
+
+        const html = `
+            <section id="inicio">
+                <div class="title">
+                    <h1>${data.title}</h1>
+                    <h3 class="author-name">${data.author || ''}</h3>
+                </div>
+            </section>
+
+            <section>
+                <div class="parallax-one parallax-section">
+                    <img src="${imgPath}" alt="${data.title}" class="parallax-img">
+                </div>
+            </section>
+
+            <section>
+                <div class="block">
+                    ${htmlContent}
+                </div>
+            </section>
+        `;
+
+        container.innerHTML = html;
+        return true;
+
+    } catch (error) {
+        console.error(error);
+        container.innerHTML = `<div class="block"><p>Error cargando el artículo: ${error.message}</p></div>`;
+        return true;
+    }
+}
+
+// Setup parallax effect
 function setupParallax() {
-    // Parallax for Pan's Labyrinth and Sunrise
-    const standardSections = document.querySelectorAll('.parallax-one, .parallax-two')
-
+    // Standard parallax
+    const standardSections = document.querySelectorAll('.parallax-one, .parallax-two');
     standardSections.forEach((section) => {
-        const img = section.querySelector('.parallax-img')
-
+        const img = section.querySelector('.parallax-img');
         if (img) {
             gsap.fromTo(img,
-                {
-                    yPercent: -40
-                },
+                { yPercent: -40 },
                 {
                     yPercent: 40,
                     ease: 'none',
@@ -45,20 +131,17 @@ function setupParallax() {
                         scrub: 0.3,
                     }
                 }
-            )
+            );
         }
-    })
+    });
 
-    // Special parallax for The Truman Show - starts lower to show actor's face
-    const trumanSection = document.querySelector('.parallax-three')
+    // Special parallax for Truman Show (or similar layouts)
+    const trumanSection = document.querySelector('.parallax-three');
     if (trumanSection) {
-        const img = trumanSection.querySelector('.parallax-img')
-
+        const img = trumanSection.querySelector('.parallax-img');
         if (img) {
             gsap.fromTo(img,
-                {
-                    yPercent: -20 // Starts higher (image shifted less up) to show face
-                },
+                { yPercent: -20 },
                 {
                     yPercent: 50,
                     ease: 'none',
@@ -69,62 +152,68 @@ function setupParallax() {
                         scrub: 0.3,
                     }
                 }
-            )
+            );
         }
     }
 }
 
 // Setup intro animation
 function setupIntro() {
-    document.body.classList.add('loaded')
+    // 1. Force initial state immediately
+    gsap.set('.navbar', { y: -100, opacity: 0 });
+    gsap.set('#parallax-world-of-ugg .title h1', { y: 20, opacity: 0 });
+    gsap.set('#parallax-world-of-ugg .title h3', { y: 15, opacity: 0 });
+    gsap.set('.quote-title', { y: 20, opacity: 0 });
+    gsap.set('.separator', { scaleX: 0, opacity: 0 });
+    gsap.set('.author-name', { y: 15, opacity: 0 });
+    gsap.set('.parallax-section, .block', { y: 20, opacity: 0 });
+    gsap.set('.review-card', { y: 30, opacity: 0 });
 
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+    // 2. Reveal body
+    document.body.classList.add('loaded');
 
-    tl.fromTo('.navbar',
-        { y: -100, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, delay: 0.5 }
-    )
-        .fromTo('#parallax-world-of-ugg .title h1',
-            { y: 30, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.2 },
-            '-=0.6'
-        )
-        .fromTo('#parallax-world-of-ugg .title h3',
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1 },
-            '-=0.8'
-        )
-        // Support for criticas page titles too
-        .fromTo('.quote-title',
-            { y: 30, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.2 },
-            '-=1'
-        )
-        .fromTo('.separator',
-            { scaleX: 0, opacity: 0 },
-            { scaleX: 1, opacity: 1, duration: 0.8 },
-            '-=0.8'
-        )
-        .fromTo('.author-name',
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1 },
-            '-=0.6'
-        )
-        // Animate main content gracefully
-        .fromTo('.parallax-section, .block, .reviews-container',
-            { y: 30, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1, stagger: 0.15 },
-            '-=0.4'
-        )
+    // 3. Start Animation Timeline
+    const tl = gsap.timeline({
+        defaults: { ease: 'power2.out' },
+        delay: 0.2
+    });
+
+    tl.to('.navbar', { y: 0, opacity: 1, duration: 1 })
+        .to('#parallax-world-of-ugg .title h1', { y: 0, opacity: 1, duration: 1 }, '-=0.8')
+        .to('#parallax-world-of-ugg .title h3', { y: 0, opacity: 1, duration: 0.8 }, '-=0.8')
+        .to('.quote-title', { y: 0, opacity: 1, duration: 1 }, '-=0.8')
+        .to('.separator', { scaleX: 1, opacity: 1, duration: 0.8 }, '-=0.8')
+        .to('.author-name', { y: 0, opacity: 1, duration: 0.8 }, '-=0.6')
+        .to('.parallax-section, .block', {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.1
+        }, '-=0.6')
+        .to('.review-card', {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.1
+        }, '-=0.6');
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    setupParallax()
-    setupIntro()
-})
+// Global initialization
+document.addEventListener('DOMContentLoaded', async () => {
+    // Try to load article content if on article page
+    const isArticle = await loadArticle();
 
-// Also run on window load to ensure images are ready
+    // Initialize animations
+    setupParallax();
+    setupIntro();
+
+    // Refresh ScrollTrigger if content changed height
+    if (isArticle) {
+        ScrollTrigger.refresh();
+    }
+});
+
+// Extra refresh on window load to be safe with images
 window.addEventListener('load', () => {
-    ScrollTrigger.refresh()
-})
+    ScrollTrigger.refresh();
+});
