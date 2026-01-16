@@ -215,6 +215,7 @@
   width: 940px;
   margin: 0 auto;
   text-align: justify;
+  opacity: 0;
 }
 
 #parallax-world-of-ugg .block-gray {
@@ -242,6 +243,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
 }
 
 .parallax-img {
@@ -361,6 +363,8 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
+  opacity: 0;
+  /* Animación inicial */
 }
 
 .reviews-grid {

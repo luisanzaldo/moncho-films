@@ -110,6 +110,12 @@ function setupIntro() {
             { y: 0, opacity: 1, duration: 1 },
             '-=0.6'
         )
+        // Animate main content gracefully
+        .fromTo('.parallax-section, .block, .reviews-container',
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1, stagger: 0.15 },
+            '-=0.4'
+        )
 }
 
 // Initialize when DOM is ready
