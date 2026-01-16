@@ -2,7 +2,7 @@
 title: 'La La Land'
 description: 'Una carta de amor al cine clásico de Hollywood que celebra los sueños, el romance y los sacrificios del arte.'
 pubDate: 2016-12-09
-heroImage: '../../images/lalaland.jpg'
+heroImage: '../../images/Lalaland2.jpg'
 author: 'Damien Chazelle'
 ---
 

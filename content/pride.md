@@ -1,7 +1,7 @@
 ---
 title: 'Pride & Prejudice'
 description: 'Una adaptación luminosa y visceral de la novela de Jane Austen que captura la intensidad emocional del romance clásico.'
-pubDate: 2005-09-16
+pubDate: 2005-09-20
 heroImage: '../../images/pride.jpg'
 author: 'Joe Wright'
 ---
